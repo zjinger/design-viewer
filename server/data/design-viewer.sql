@@ -63,7 +63,6 @@ CREATE TABLE IF NOT EXISTS "tbl_files" (
   "uploaderId" VARCHAR(36),
   "uploadTime" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   "sysCreated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  "sysUpdated" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   "sysDeleted" TINYINT(1) NOT NULL DEFAULT 0,
   FOREIGN KEY ("projectId") REFERENCES "tbl_projects"("id"),
   FOREIGN KEY ("parentId") REFERENCES "tbl_files"("id"),
