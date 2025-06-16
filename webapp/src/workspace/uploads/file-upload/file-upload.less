@@ -1,0 +1,59 @@
+@import "variables.less";
+.design-upload {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .upload-content {
+    flex: 0 0 auto;
+    margin-bottom: 20px;
+  }
+  .file-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    width: 100%;
+    .item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 4px 12px;
+      border-bottom: 1px solid #f0f0f0;
+      width: 100%;
+      &:first-child {
+        border-top: 1px solid #f0f0f0;
+      }
+      &:last-child {
+        border-bottom: none;
+      }
+      &:hover {
+        background-color: @primary-color;
+        color: #fff;
+        [nz-tag] {
+          color: #fff;
+          background-color: darken(@primary-color, 10%);
+        }
+      }
+      [nz-tag] {
+        flex: 0 0 auto;
+      }
+      .file-info {
+        flex: 1;
+        display: inline-flex;
+        flex-direction: row;
+      }
+    }
+  }
+  .actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex: 0 0 auto;
+    [nz-button] {
+      margin: 0 10px;
+    }
+  }
+}
