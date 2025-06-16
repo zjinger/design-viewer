@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "lib": ["es2020","DOM"],
+    "module": "commonjs",
+    "target": "es2020",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "incremental": true,
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "sourceMap": false,
+    "outDir": "build/app",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "types": ["node"],
+    "typeRoots": ["./node_modules/@types", "./src"]
+  },
+  "include": ["src/**/*.ts", "test/**/*.ts", "src/typings.d.ts"],
+  "exclude": ["node_modules", "build", "dist"]
+}
