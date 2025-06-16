@@ -1,0 +1,140 @@
+// layout.component.less
+
+// 主题变量
+@primary-color:    #0066cc;
+@bg-light:         #f4f6f8;
+@side-bg:          #ffffff;
+@border-color:     #e0e0e0;
+@text-color:       #333;
+@header-height:    56px;
+@footer-height:    32px;
+@nav-width:        200px;
+@transition-fast:  all 0.2s ease;
+
+// 整体布局
+.publish-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: @bg-light;
+  color: @text-color;
+
+  // 头部
+  .publish-header {
+    height: @header-height;
+    background: @primary-color;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+    .nav-toggle {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: none;  // 仅移动端显示
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  // 主体区：侧边栏 + 内容
+  .publish-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+
+    // 侧边导航 —— 桌面端始终宽度固定
+    .side-nav {
+      width: @nav-width;
+      background: @side-bg;
+      border-right: 1px solid @border-color;
+      transition: @transition-fast;
+
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 1rem 0;
+
+        li {
+          a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: @text-color;
+            text-decoration: none;
+            transition: @transition-fast;
+
+            &.active,
+            &:hover {
+              background: @primary-color;
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+
+    // 主内容区
+    .main-content {
+      flex: 1;
+      padding: 1.5rem;
+      overflow-y: auto;
+    }
+  }
+
+  // 页脚
+  .publish-footer {
+    height: @footer-height;
+    background: @side-bg;
+    border-top: 1px solid @border-color;
+    text-align: center;
+    line-height: @footer-height;
+    font-size: 0.85rem;
+  }
+}
+
+// 移动端折叠逻辑（≤768px）
+@media (max-width: 768px) {
+  .publish-layout {
+    .publish-header {
+      .nav-toggle {
+        display: block;
+      }
+    }
+
+    .publish-body {
+      flex-direction: column;
+
+      .side-nav {
+        position: absolute;
+        top: @header-height;
+        left: 0;
+        height: calc(~"100vh - @{header-height}");
+        width: @nav-width;
+        background: @side-bg;
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease-in-out;
+        transform: translateX(-100%);
+
+        // 当 navCollapsed = false 时，应用 .expanded 类来展开
+        &.expanded {
+          transform: translateX(0);
+        }
+      }
+
+      .main-content {
+        margin-top: @header-height;
+        padding: 1rem;
+      }
+    }
+  }
+}

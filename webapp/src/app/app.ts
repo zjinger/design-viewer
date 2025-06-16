@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.less'
+  template: `<router-outlet></router-outlet>`,
+  styleUrl: './app.less',
 })
 export class App {
-  protected title = 'webapp';
+  protected title = '静态发布工具';
 }

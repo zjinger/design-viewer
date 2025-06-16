@@ -1,0 +1,42 @@
+<main class="publish-layout">
+  <!-- 头部 -->
+  <header class="publish-header">
+    <div class="logo">静态发布工具</div>
+    <button class="nav-toggle" (click)="toggleNav()" aria-label="切换导航">
+      ☰
+    </button>
+  </header>
+
+  <!-- 主体：侧边栏 + 内容区 -->
+  <div class="publish-body">
+    <!-- 侧边导航 -->
+    <aside
+      class="side-nav"
+      [class.collapsed]="navCollapsed"
+      [class.expanded]="!navCollapsed"
+    >
+      <ul>
+        <li
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <a routerLink="/upload">上传设计稿</a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="/projects">我的项目</a>
+        </li>
+        <li routerLinkActive="active">
+          <a routerLink="/help">使用帮助</a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- 路由渲染的主内容区 -->
+    <section class="main-content">
+      <router-outlet></router-outlet>
+    </section>
+  </div>
+
+  <!-- 页脚 -->
+  <footer class="publish-footer">&copy; 2025 静态发布工具</footer>
+</main>
