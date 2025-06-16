@@ -3,7 +3,7 @@ import { LOG_EVENT_TYPE, LOG_LEVEL } from "@/constants/log";
 import { utils } from "@/utils/utils";
 import { FastifyRequest } from "fastify";
 import { AppFastifyInstance } from "@/types/fastify-instance";
-const isDev = process.env.NODE_ENV === "development";
+// const isDev = process.env.NODE_ENV === "development";
 export class LoggerService {
   private db: Database;
   private server: AppFastifyInstance;

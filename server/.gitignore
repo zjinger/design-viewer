@@ -50,3 +50,7 @@ build/uploads
 #test
 test/data.json
 test/*.conf
+
+
+#web www
+www/

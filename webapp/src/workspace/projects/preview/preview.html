@@ -1,0 +1,7 @@
+<div class="preview-page">
+  <header>
+    <button class="back-btn" (click)="goBack()">← 返回</button>
+    <h3>{{ projectName }} 预览</h3>
+  </header>
+  <iframe [src]="safeUrl" class="preview-frame"></iframe>
+</div>

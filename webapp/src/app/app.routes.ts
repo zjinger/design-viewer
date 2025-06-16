@@ -8,13 +8,24 @@ export const routes: Routes = [
     component: Layout,
     children: [
       {
+        path: 'uploads',
+        loadChildren: () =>
+          import('../workspace/uploads/uploads-module').then(
+            (m) => m.UploadsModule
+          ),
+      },
+      {
         path: 'projects',
-        loadComponent: () =>
+        loadChildren: () =>
           import('../workspace/projects/projects-module').then(
             (m) => m.ProjectsModule
           ),
       },
     ],
+  },
+  {
+    path: 'help',
+    loadComponent: () => import('../useage/useage').then((m) => m.Useage),
   },
   {
     path: 'login',

@@ -1,6 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { BaseControllerImpl } from "./base.controller";
-import { saveFile } from "@/helpers/upload.helper";
 import { ERRORS } from "@/helpers/errors.helper";
 import fs from "fs-extra";
 import { utils } from "@/utils/utils";
@@ -26,9 +25,9 @@ export class UploadControllerImpl extends BaseControllerImpl {
       if (!ALLOWED_UPLOAD_TYPES.includes(type)) {
         return this.handleError(reply, ERRORS.invalidUploadType);
       }
-      const file = await saveFile(request, "install_log", this.db);
-      this.log.info(`附件上传成功：${file.fileName}`);
-      return this.handleSuccess(reply, file);
+      // const file = await saveFile(request, "install_log", this.db);
+      // this.log.info(`附件上传成功：${file.fileName}`);
+      // return this.handleSuccess(reply, file);
     } catch (e) {
       return this.handleError(reply, ERRORS.uploadError, e);
     }

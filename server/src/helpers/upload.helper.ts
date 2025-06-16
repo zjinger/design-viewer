@@ -1,18 +1,22 @@
-import { utils } from "@/utils/utils";
+// upload.helper.ts
 import { FastifyRequest } from "fastify";
 import path from "path";
 import fs from "fs-extra";
-import { AppError, ERRORS } from "./errors.helper";
 import { Database } from "better-sqlite3";
+import { AppError, ERRORS } from "./errors.helper";
 import { IUploadsInfoType, IUserInfoDto } from "@/schemas";
 import { getUploadDir } from "@/utils/getEnvPath";
+import { utils } from "@/utils/utils";
+
 export interface UploadFile {
   id: string;
+  projectId: string;
+  parentId?: string;
   fileName: string;
   storedName: string;
   filePath: string;
   fileType: string;
-  category: string;
+  category?: string;
   fileSize: number;
   uploaderId?: string;
 }
@@ -28,61 +32,72 @@ function pumpStream(source: NodeJS.ReadableStream, dest: fs.WriteStream) {
 
 export function saveFileToDb(db: Database, model: UploadFile) {
   try {
-    const stmt = db.prepare(`
-      INSERT INTO tbl_uploads
-        (id, fileName, storedName, filePath, fileType, category, fileSize,uploaderId,sysCreated,sysUpdated)
-      VALUES (?, ?, ?, ?, ?, ?, ?,?,?,?)
+    const insertFile = db.prepare(`
+      INSERT INTO tbl_files
+        (id, projectId, fileName, storedName, filePath, fileSize, fileType, category, parentId, uploaderId)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
-    const time = utils.getCurrentTime();
-    stmt.run(
+    insertFile.run(
       model.id,
+      model.projectId,
       model.fileName,
       model.storedName,
       model.filePath,
-      model.fileType,
-      model.category,
       model.fileSize,
-      model.uploaderId || "",
-      time,
-      time
+      model.fileType,
+      model.category || null,
+      model.parentId || null,
+      model.uploaderId || null
     );
+
+    // 维护多对多关联
+    const linkStmt = db.prepare(`
+      INSERT OR IGNORE INTO tbl_projects_files (projectId, fileId)
+      VALUES (?, ?)
+    `);
+    linkStmt.run(model.projectId, model.id);
   } catch (e) {
     throw new AppError("数据库写入失败", 500);
   }
 }
 
 /**
- * @description 通用文件上传
- * @param {FastifyRequest}
- * @param {string} category 上传类型 用于区分不同的上传文件类型 config firmware
- * @param {Database} 可选，将文件信息保存到数据库
- * @author ZhangJing
+ * 通用文件上传
+ * @param req Fastify 请求
+ * @param category 上传类型（区分目录）
+ * @param projectId 所属项目 ID
+ * @param parentId 可选：上级文件夹 ID
+ * @param db 可选：better-sqlite3 实例
  */
 export const saveFile = async (
   req: FastifyRequest,
   category: IUploadsInfoType,
+  projectId: string,
+  parentId?: string,
   db?: Database
 ) => {
   const data = await req.file();
-  if (!data) {
-    throw new AppError(ERRORS.fileNotFound.message);
-  }
+  if (!data) throw new AppError(ERRORS.fileNotFound.message);
+
   const id = utils.genUUID();
   const originalName = data.filename;
   const ext = originalName.toLowerCase().endsWith(".tar.gz")
     ? ".tar.gz"
     : path.extname(originalName);
-  const timestamp = utils.getTimeName(); // 格式化的时间戳
+  const timestamp = utils.getTimeName();
   const storedName = `${id}_${timestamp}${ext}`;
-  const dir = getUploadDir(category); // 上传目录
+
+  const dir = getUploadDir(category);
+  await fs.ensureDir(dir);
+
   const filePath = path.join(dir, storedName);
-  const writeStream = fs.createWriteStream(filePath);
   try {
-    await pumpStream(data.file, writeStream);
+    await pumpStream(data.file, fs.createWriteStream(filePath));
   } catch (e) {
     req.log.error(e);
     throw new AppError("写入文件失败", 500);
   }
+
   let stats: fs.Stats;
   try {
     stats = await fs.stat(filePath);
@@ -90,8 +105,11 @@ export const saveFile = async (
     req.log.error(e);
     throw new AppError("获取文件信息失败", 500);
   }
+
   const model: UploadFile = {
     id,
+    projectId,
+    parentId,
     fileName: originalName,
     storedName,
     filePath,
@@ -99,6 +117,7 @@ export const saveFile = async (
     category,
     fileSize: stats.size,
   };
+
   if (db) {
     try {
       const user = req.user as IUserInfoDto;
@@ -107,11 +126,10 @@ export const saveFile = async (
     } catch (e) {
       req.log.error(e);
       await fs.remove(filePath).catch(() => {});
-      if (e instanceof AppError) {
-        throw e;
-      }
+      if (e instanceof AppError) throw e;
       throw new AppError(ERRORS.fileUploadError.message);
     }
   }
+
   return model;
 };

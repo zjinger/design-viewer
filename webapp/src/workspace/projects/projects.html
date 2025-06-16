@@ -1,1 +1,19 @@
-<p>projects works!</p>
+<div class="projects-page">
+  <div class="projects-header">
+    <h2>我的项目</h2>
+  </div>
+  <ul class="project-list">
+    <li *ngFor="let proj of projects" (click)="openDetail(proj)">
+      <div class="info">
+        <span class="proj-name">{{ proj.name }}</span>
+        <span class="proj-date">{{ proj.updated | date:'yyyy-MM-dd' }}</span>
+      </div>
+      <button
+        class="preview-btn"
+        (click)="viewPreview(proj); $event.stopPropagation()"
+      >
+        预览
+      </button>
+    </li>
+  </ul>
+</div>

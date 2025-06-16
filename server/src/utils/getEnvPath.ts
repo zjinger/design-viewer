@@ -187,10 +187,7 @@ export const getUpgradeEnv = (): UpgradeEnvOpt => {
  * @returns
  */
 export const getWwwPath = (): string => {
-  const rootDir = isDev
-    ? path.join(curDir, "build", "www")
-    : path.join(curDir, "www");
-  return rootDir;
+  return path.join(curDir, "www");
 };
 
 /**

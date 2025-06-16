@@ -1,15 +1,5 @@
 // layout.component.less
-
-// 主题变量
-@primary-color:    #0066cc;
-@bg-light:         #f4f6f8;
-@side-bg:          #ffffff;
-@border-color:     #e0e0e0;
-@text-color:       #333;
-@header-height:    56px;
-@footer-height:    32px;
-@nav-width:        200px;
-@transition-fast:  all 0.2s ease;
+@import "variables.less";
 
 // 整体布局
 .publish-layout {
@@ -39,7 +29,7 @@
       color: #fff;
       font-size: 1.5rem;
       cursor: pointer;
-      display: none;  // 仅移动端显示
+      display: none; // 仅移动端显示
 
       &:focus {
         outline: none;
@@ -72,9 +62,10 @@
             color: @text-color;
             text-decoration: none;
             transition: @transition-fast;
-
-            &.active,
-            &:hover {
+          }
+          &.active,
+          &:hover {
+            a {
               background: @primary-color;
               color: #fff;
             }

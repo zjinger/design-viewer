@@ -8,6 +8,10 @@ const routes: Routes = [
     path: 'list',
     component: Projects,
   },
+  {
+    path: 'preview/:id',
+    loadComponent: () => import('./preview/preview').then((m) => m.Preview),
+  },
 ];
 
 @NgModule({

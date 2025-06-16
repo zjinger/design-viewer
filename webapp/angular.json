@@ -25,8 +25,10 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "outputPath": "../server/www",
+            "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
@@ -37,7 +39,11 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.less"]
+            "styles": ["src/styles.less"],
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": ["src/styles"]
+            }
           },
           "configurations": {
             "production": {
@@ -64,7 +70,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "webapp:build:production"
@@ -79,10 +85,10 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
-          "builder": "@angular/build:extract-i18n"
+          "builder": "@angular-devkit/build-angular:extract-i18n"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
@@ -93,7 +99,8 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.less"]
+            "styles": ["src/styles.less"],
+            "scripts": []
           }
         }
       }

@@ -1,0 +1,66 @@
+@import 'variables.less';
+.projects-page {
+  padding: 1rem;
+
+  .projects-header {
+    margin-bottom: 1rem;
+    h2 {
+      margin: 0;
+      color: @primary-color;
+      font-size: 1.5rem;
+    }
+  }
+
+  .project-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      background: #fff;
+      border: 1px solid @border-color;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: @transition-fast;
+
+      &.selected,
+      &:hover {
+        background: lighten(@primary-color, 45%);
+      }
+
+      .info {
+        display: flex;
+        flex-direction: column;
+
+        .proj-name {
+          font-weight: 500;
+          color: @text-color;
+        }
+
+        .proj-date {
+          font-size: 0.85rem;
+          color: darken(@text-color, 20%);
+        }
+      }
+
+      .preview-btn {
+        padding: 0.25rem 0.75rem;
+        background: @primary-color;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: @transition-fast;
+
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+    }
+  }
+}

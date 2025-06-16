@@ -1,6 +1,6 @@
 import { AppError } from "@/helpers/errors.helper";
 import { handleSuccess, handleError } from "@/helpers/response.helper";
-import { RpcOptions, PubRequestBody } from "@/schemas/SubPub";
+
 import { LoggerService } from "@/services/log.service";
 import { JWT } from "@fastify/jwt";
 import { Database } from "better-sqlite3";
@@ -38,10 +38,7 @@ export class BaseControllerImpl {
   log: FastifyBaseLogger;
   logger: LoggerService;
   jwt: JWT;
-  redisRpc: <T, S>(
-    requestParams: PubRequestBody<T>,
-    opt?: RpcOptions
-  ) => Promise<S>;
+
   handleSuccess: <T>(
     reply: FastifyReply,
     datas: T,
@@ -62,8 +59,6 @@ export class BaseControllerImpl {
     // @ts-ignore
     this.logger = fastify.logger;
     this.jwt = fastify.jwt;
-    // @ts-ignore
-    this.redisRpc = fastify.redisRpc;
   }
 
   updateCached = () => {
